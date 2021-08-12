@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "410026413899",
+    "firebase_url": "https://snapshots-app-ccb7f-default-rtdb.firebaseio.com",
+    "project_id": "snapshots-app-ccb7f",
+    "storage_bucket": "snapshots-app-ccb7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410026413899:android:66361a53bc3bd344fe62ce",
+        "android_client_info": {
+          "package_name": "com.blackpanthers.snapshots"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410026413899-2keio84s9m736lfvst5gn2dmnet7k532.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtftSsPwkjZ9xhplCNm6E48msrrdn4Nhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410026413899-2keio84s9m736lfvst5gn2dmnet7k532.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

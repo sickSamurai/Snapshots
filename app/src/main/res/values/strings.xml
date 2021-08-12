@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Snapshots</string>
+    <string name="home_title">Home</string>
+    <string name="home_profile">Profile</string>
+    <string name="home_add_photo">Add</string>
+    <string name="message_select_image">Select a image</string>
+    <string name="message_add_title">Add a title, please</string>
+    <string name="message_successful_upload">Snapshot uploaded successfully</string>
+    <string name="message_failed_upload">Failed snapshot upload</string>
+    <string name="hint_input_title">Snapshot title</string>
+</resources>
