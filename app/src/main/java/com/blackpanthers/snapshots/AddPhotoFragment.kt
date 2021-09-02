@@ -19,19 +19,20 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 
 class AddPhotoFragment : Fragment() {
+
   private val PATH_SNAPSHOTS = "snapshots"
   private lateinit var binding: FragmentAddPhotoBinding
-  private lateinit var databaseReference: DatabaseReference
+  private lateinit var myDatabaseReference: DatabaseReference
   private lateinit var myStorageReference: StorageReference
   private var selectedPhotoURI: Uri? = null
 
-  private val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
-    if (result.resultCode == Activity.RESULT_OK) setPhoto(result.data); setPostMode()
+  private val resultLauncher = registerForActivityResult(StartActivityForResult()) {
+      result -> if (result.resultCode == Activity.RESULT_OK) setPhoto(result.data); setPostMode()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     binding = FragmentAddPhotoBinding.inflate(inflater, container, false)
-    databaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
+    myDatabaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
     myStorageReference = FirebaseStorage.getInstance().reference
     return binding.root
   }
@@ -45,7 +46,7 @@ class AddPhotoFragment : Fragment() {
   }
 
   private fun saveSnapshot(snapshot: Snapshot) {
-    databaseReference.child(snapshot.id).setValue(snapshot)
+    myDatabaseReference.child(snapshot.id).setValue(snapshot)
     Snackbar.make(binding.root, R.string.message_successful_upload, Snackbar.LENGTH_SHORT).show()
   }
 
@@ -89,7 +90,7 @@ class AddPhotoFragment : Fragment() {
   }
 
   private fun postSnapshot() {
-    val key = databaseReference.push().key!!
+    val key = myDatabaseReference.push().key!!
     val storageReference = myStorageReference.child(PATH_SNAPSHOTS).child(key)
     if (selectedPhotoURI != null) {
       toggleProgressBar()
