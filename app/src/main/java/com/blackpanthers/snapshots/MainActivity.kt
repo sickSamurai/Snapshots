@@ -1,21 +1,38 @@
 package com.blackpanthers.snapshots
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.blackpanthers.snapshots.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-  private lateinit var binding: ActivityMainBinding
+  lateinit var binding: ActivityMainBinding
   private var fragmentManager: FragmentManager = supportFragmentManager
   private lateinit var activeFragment: Fragment
+  private lateinit var loginLauncher: LoginLauncher
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     binding = ActivityMainBinding.inflate(layoutInflater)
+    loginLauncher = LoginLauncher(this)
     setContentView(binding.root)
+  }
+
+  override fun onStart() {
+    super.onStart()
+    loginLauncher.setupAuth()
     setupBottomNavBar()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    loginLauncher.addAuthStateListener()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    loginLauncher.removeAuthStateListener()
   }
 
   fun addFragments(vararg fragments: Fragment) {
@@ -26,12 +43,12 @@ class MainActivity : AppCompatActivity() {
         .commit()
   }
 
-  fun showFragment(fragmentToShow: Fragment){
+  fun showFragment(fragmentToShow: Fragment) {
     fragmentManager.beginTransaction().show(fragmentToShow).commit()
     activeFragment = fragmentToShow
   }
 
-  fun hideFragment(fragmentToHide: Fragment){
+  fun hideFragment(fragmentToHide: Fragment) {
     fragmentManager.beginTransaction().hide(fragmentToHide).commit()
   }
 
@@ -40,7 +57,9 @@ class MainActivity : AppCompatActivity() {
       fragmentManager.beginTransaction().hide(activeFragment).show(fragmentToShow).commit()
       activeFragment = fragmentToShow
       true
-    } else false
+    } else {
+      false
+    }
   }
 
   fun setupBottomNavBar() {
@@ -49,6 +68,7 @@ class MainActivity : AppCompatActivity() {
     val profileFragment = ProfileFragment()
     addFragments(profileFragment, addPhotoFragment, homeFragment)
     showFragment(homeFragment)
+
     binding.bottomNavBar.setOnItemSelectedListener {
       when (it.itemId) {
         R.id.action_home -> changeToFragment(homeFragment)
@@ -58,6 +78,5 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
-
 
 }

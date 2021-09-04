@@ -4,6 +4,7 @@
     <JetCodeStyleSettings>
       <option name="CONTINUATION_INDENT_IN_IF_CONDITIONS" value="true" />
       <option name="IF_RPAREN_ON_NEW_LINE" value="false" />
+      <option name="ALLOW_TRAILING_COMMA" value="true" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <codeStyleSettings language="XML">
