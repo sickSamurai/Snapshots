@@ -37,8 +37,10 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
     val query = FirebaseDatabase.getInstance().reference.child("snapshots")
     val options = FirebaseRecyclerOptions.Builder<Snapshot>().setQuery(query, Snapshot::class.java).build()
+
     firebaseAdapter = object : FirebaseRecyclerAdapter<Snapshot, SnapshotHolder>(options) {
 
       override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnapshotHolder {
@@ -54,13 +56,13 @@ class HomeFragment : Fragment() {
             .load(snapshot.photoURL)
             .error(R.drawable.ic_broken_image)
             .centerInside()
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .into(binding.imgPhoto)
         }
       }
 
       override fun onDataChanged() {
         super.onDataChanged()
+        notifyDataSetChanged()
         binding.progressBar.visibility = View.GONE
       }
 

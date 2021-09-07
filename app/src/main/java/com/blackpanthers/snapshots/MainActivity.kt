@@ -8,8 +8,8 @@ import com.blackpanthers.snapshots.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
   lateinit var binding: ActivityMainBinding
-  private var fragmentManager: FragmentManager = supportFragmentManager
-  private lateinit var activeFragment: Fragment
+  private var fragmentManager = supportFragmentManager
+  private var activeFragment: Fragment? = null
   private lateinit var loginLauncher: LoginLauncher
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,11 +17,6 @@ class MainActivity : AppCompatActivity() {
     binding = ActivityMainBinding.inflate(layoutInflater)
     loginLauncher = LoginLauncher(this)
     setContentView(binding.root)
-  }
-
-  override fun onStart() {
-    super.onStart()
-    loginLauncher.setupAuth()
     setupBottomNavBar()
   }
 
@@ -50,15 +45,16 @@ class MainActivity : AppCompatActivity() {
 
   fun hideFragment(fragmentToHide: Fragment) {
     fragmentManager.beginTransaction().hide(fragmentToHide).commit()
+    activeFragment = null
   }
 
   fun changeToFragment(fragmentToShow: Fragment): Boolean {
-    return if (fragmentToShow.isHidden) {
-      fragmentManager.beginTransaction().hide(activeFragment).show(fragmentToShow).commit()
+    if (fragmentToShow.isHidden) {
+      fragmentManager.beginTransaction().hide(activeFragment!!).show(fragmentToShow).commit()
       activeFragment = fragmentToShow
-      true
+      return true
     } else {
-      false
+      return false
     }
   }
 
@@ -68,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     val profileFragment = ProfileFragment()
     addFragments(profileFragment, addPhotoFragment, homeFragment)
     showFragment(homeFragment)
-
     binding.bottomNavBar.setOnItemSelectedListener {
       when (it.itemId) {
         R.id.action_home -> changeToFragment(homeFragment)

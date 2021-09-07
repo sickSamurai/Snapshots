@@ -13,10 +13,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginLauncher(var activity: MainActivity) {
   private var auth: FirebaseAuth? = null
-  private lateinit var authListener: FirebaseAuth.AuthStateListener
-  private lateinit var loginLauncher: ActivityResultLauncher<Intent>
+  private var authListener: FirebaseAuth.AuthStateListener
+  private var loginLauncher: ActivityResultLauncher<Intent>
 
-  fun setupAuth() {
+  init {
 
     auth = FirebaseAuth.getInstance()
 

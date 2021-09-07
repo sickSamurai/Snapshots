@@ -21,13 +21,14 @@ class AddPhotoFragment : Fragment() {
   private lateinit var binding: FragmentAddPhotoBinding
   private lateinit var myDatabaseReference: DatabaseReference
   private lateinit var myStorageReference: StorageReference
-  private var imagePicker = ImagePicker(this)
+  private lateinit var imagePicker: ImagePicker
   private var selectedPhotoURI: Uri? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     binding = FragmentAddPhotoBinding.inflate(inflater, container, false)
     myDatabaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
     myStorageReference = FirebaseStorage.getInstance().reference
+    imagePicker = ImagePicker(this)
     return binding.root
   }
 
@@ -56,13 +57,12 @@ class AddPhotoFragment : Fragment() {
     }
   }
 
-  fun setPhoto(data: Intent?) {
-    selectedPhotoURI = data?.data
+  fun setPhoto(intent: Intent?) {
+    selectedPhotoURI = intent?.data
     binding.imgPhoto.setImageURI(selectedPhotoURI)
   }
 
   fun saveSnapshot(snapshot: Snapshot) {
-    Utilities.hideKeyboard(this)
     myDatabaseReference.child(snapshot.id).setValue(snapshot)
     Snackbar.make(binding.root, R.string.message_successful_upload, Snackbar.LENGTH_SHORT).show()
   }
@@ -80,24 +80,28 @@ class AddPhotoFragment : Fragment() {
   }
 
   fun postSnapshot() {
+    Utilities.hideKeyboard(this)
     val key = myDatabaseReference.push().key!!
     val storageReference = myStorageReference.child(PATH_SNAPSHOTS).child(key)
     if (selectedPhotoURI != null) {
-      toggleProgressBar()
       storageReference.putFile(selectedPhotoURI!!)
-        .addOnProgressListener { updateProgressBar(it) }
+        .addOnProgressListener {
+          toggleProgressBar()
+          updateProgressBar(it)
+        }
         .addOnFailureListener {
-          Snackbar.make(binding.root, R.string.message_failed_upload, Snackbar.LENGTH_SHORT)
-            .show()
+          val message = getString(R.string.message_failed_upload) + ":" + " " + "${it.message}"
+          Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+          setPostMode()
         }
         .addOnSuccessListener {
-          it.storage.downloadUrl.addOnSuccessListener { uri ->
-            val title = binding.inputTitle.text.toString()
-            val url = uri.toString()
-            saveSnapshot(Snapshot(key, title, url))
+          it.storage.downloadUrl.addOnSuccessListener { url ->
+            saveSnapshot(Snapshot(key, binding.inputTitle.text.toString(), url.toString()))
+          }.addOnCompleteListener {
+            setSelectMode()
           }
         }
-        .addOnCompleteListener { toggleProgressBar(); setSelectMode() }
+        .addOnCompleteListener { toggleProgressBar() }
     }
   }
 }
