@@ -6,37 +6,55 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.blackpanthers.snapshots.databinding.FragmentAddPhotoBinding
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask.TaskSnapshot
+import java.lang.Exception
 
 class AddPhotoFragment : Fragment() {
 
-  private val PATH_SNAPSHOTS = "snapshots"
   private lateinit var binding: FragmentAddPhotoBinding
   private lateinit var myDatabaseReference: DatabaseReference
   private lateinit var myStorageReference: StorageReference
-  private lateinit var imagePicker: ImagePicker
+  private var imagePicker = ImagePicker()
   private var selectedPhotoURI: Uri? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     binding = FragmentAddPhotoBinding.inflate(inflater, container, false)
-    myDatabaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOTS)
-    myStorageReference = FirebaseStorage.getInstance().reference
-    imagePicker = ImagePicker(this)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setupFirebase()
+    setupImagePicker()
+    setupButtons()
+  }
+
+  fun setupFirebase(){
+    myDatabaseReference = FirebaseUtilities.getDatabaseReference()
+    myStorageReference = FirebaseStorage.getInstance().reference
+  }
+
+  fun setupImagePicker() {
+    imagePicker.setupLauncher(this) {
+      if (it != null) setPostMode()
+      setPhoto(it)
+    }
+  }
+
+  fun setupButtons() {
     with(binding) {
       btnSelect.setOnClickListener { imagePicker.openGallery() }
-      btnPost.setOnClickListener { postSnapshot() }
+      btnPost.setOnClickListener {
+        KeyboardHider.hideKeyboard(this@AddPhotoFragment)
+        postSnapshot()
+      }
     }
   }
 
@@ -45,6 +63,7 @@ class AddPhotoFragment : Fragment() {
       textMessage.text = getString(R.string.message_select_image)
       containerInputTitle.visibility = View.GONE
       btnPost.visibility = View.GONE
+      progressBar.visibility = View.GONE
       imgPhoto.setImageURI(null)
     }
   }
@@ -54,6 +73,7 @@ class AddPhotoFragment : Fragment() {
       textMessage.text = getString(R.string.message_add_title)
       containerInputTitle.visibility = View.VISIBLE
       btnPost.visibility = View.VISIBLE
+      progressBar.visibility = View.GONE
     }
   }
 
@@ -64,44 +84,40 @@ class AddPhotoFragment : Fragment() {
 
   fun saveSnapshot(snapshot: Snapshot) {
     myDatabaseReference.child(snapshot.id).setValue(snapshot)
-    Snackbar.make(binding.root, R.string.message_successful_upload, Snackbar.LENGTH_SHORT).show()
+    Toast.makeText(context, R.string.message_successful_upload, Toast.LENGTH_SHORT).show()
   }
 
-  fun updateProgressBar(uploadTask: TaskSnapshot) {
+  fun onProgressUpload(uploadTask: TaskSnapshot) {
     val progress = (100 * uploadTask.bytesTransferred / uploadTask.totalByteCount).toDouble()
+    binding.progressBar.visibility = View.VISIBLE
     binding.progressBar.progress = progress.toInt()
-    binding.textMessage.text = "$progress%"
+    binding.textMessage.text = progress.toString()
   }
 
-  fun toggleProgressBar() {
-    binding.progressBar.apply {
-      visibility = if (visibility == View.GONE) View.VISIBLE else View.GONE
+  fun onFailedUpload(exception: Exception){
+    Toast.makeText(context, exception.message, Toast.LENGTH_SHORT).show()
+    setPostMode()
+  }
+
+  fun onSuccessUpload(task: Task<Uri?>, snapshot: Snapshot) {
+    task.addOnSuccessListener {
+      saveSnapshot(snapshot.apply { photoURL = it.toString() })
+      setSelectMode()
     }
   }
 
   fun postSnapshot() {
-    Utilities.hideKeyboard(this)
-    val key = myDatabaseReference.push().key!!
-    val storageReference = myStorageReference.child(PATH_SNAPSHOTS).child(key)
     if (selectedPhotoURI != null) {
-      storageReference.putFile(selectedPhotoURI!!)
-        .addOnProgressListener {
-          toggleProgressBar()
-          updateProgressBar(it)
-        }
-        .addOnFailureListener {
-          val message = getString(R.string.message_failed_upload) + ":" + " " + "${it.message}"
-          Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-          setPostMode()
-        }
+      val key = myDatabaseReference.push().key!!
+      myStorageReference.child(FirebaseUtilities.ROOT_PATH)
+        .child(FirebaseUtilities.getCurrentUserUID())
+        .child(key)
+        .putFile(selectedPhotoURI!!)
+        .addOnProgressListener { onProgressUpload(it) }
+        .addOnFailureListener { onFailedUpload(it) }
         .addOnSuccessListener {
-          it.storage.downloadUrl.addOnSuccessListener { url ->
-            saveSnapshot(Snapshot(key, binding.inputTitle.text.toString(), url.toString()))
-          }.addOnCompleteListener {
-            setSelectMode()
-          }
+          onSuccessUpload(it.storage.downloadUrl, Snapshot(key, binding.inputTitle.text.toString()))
         }
-        .addOnCompleteListener { toggleProgressBar() }
     }
   }
 }

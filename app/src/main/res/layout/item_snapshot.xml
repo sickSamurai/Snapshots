@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_delete" />
+            android:src="@drawable/ic_delete"
+            android:background="@color/fui_transparent"/>
 
         <TextView
             android:id="@+id/text_title"
@@ -56,7 +57,9 @@
             android:layout_marginTop="@dimen/min_space"
             android:button="@drawable/ic_thumb_up"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_photo" />
+            app:layout_constraintTop_toBottomOf="@id/img_photo"
+            android:paddingHorizontal="@dimen/min_space"
+            tools:text="#"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

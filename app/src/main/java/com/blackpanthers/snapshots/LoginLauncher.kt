@@ -8,35 +8,39 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginLauncher(var activity: MainActivity) {
+class LoginLauncher() {
   private var auth: FirebaseAuth? = null
-  private var authListener: FirebaseAuth.AuthStateListener
-  private var loginLauncher: ActivityResultLauncher<Intent>
+  private  var authListener: FirebaseAuth.AuthStateListener
+  private lateinit var loginLauncher: ActivityResultLauncher<Intent>
 
   init {
-
     auth = FirebaseAuth.getInstance()
+    authListener = FirebaseAuth.AuthStateListener { if (it.currentUser == null) signIn() }
+  }
 
-    authListener = FirebaseAuth.AuthStateListener {
-      val user = it.currentUser
-      if (user == null) {
-        signIn()
-      }
-    }
-
+  fun setupLauncher(activity: AppCompatActivity) {
     loginLauncher = activity.registerForActivityResult(StartActivityForResult()) {
       if (it.resultCode == Activity.RESULT_OK) {
-        Snackbar.make(activity.binding.root, "Bienvenido...", Snackbar.LENGTH_SHORT).show()
+        val signInMessage = activity.getString(R.string.message_sign_in) + " " + FirebaseUtilities.getCurrentUserName()
+        Toast.makeText(activity.applicationContext, signInMessage, Toast.LENGTH_SHORT).show()
       } else {
         if (IdpResponse.fromResultIntent(it.data) == null) {
           activity.finish()
         }
       }
     }
+  }
 
+  fun signIn() {
+    val providers = listOf(AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build())
+    val signInIntent = AuthUI.getInstance()
+      .createSignInIntentBuilder()
+      .setIsSmartLockEnabled(false)
+      .setAvailableProviders(providers)
+      .build()
+    loginLauncher.launch(signInIntent)
   }
 
   fun addAuthStateListener() {
@@ -46,11 +50,4 @@ class LoginLauncher(var activity: MainActivity) {
   fun removeAuthStateListener() {
     auth?.removeAuthStateListener(authListener)
   }
-
-  fun signIn() {
-    val providers = listOf(AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build())
-    val signInIntent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-    loginLauncher.launch(signInIntent)
-  }
-
 }

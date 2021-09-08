@@ -8,4 +8,8 @@
     <string name="message_successful_upload">Snapshot uploaded successfully</string>
     <string name="message_failed_upload">Failed snapshot upload</string>
     <string name="hint_input_title">Snapshot title</string>
+    <string name="btn_close_session_text">Close Session</string>
+    <string name="message_sign_out">See u later</string>
+    <string name="message_sign_in">Welcome</string>
+    <string name="message_snapshot_deleted">Snapshot deleted</string>
 </resources>

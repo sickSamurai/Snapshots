@@ -3,16 +3,19 @@ package com.blackpanthers.snapshots
 import android.app.Activity
 import android.content.Intent
 import android.provider.MediaStore
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.fragment.app.Fragment
 
-class ImagePicker(addPhotoFragment: AddPhotoFragment) {
+class ImagePicker {
 
-  private val galleryLauncher = addPhotoFragment.registerForActivityResult(StartActivityForResult()) {
-    if (it.resultCode == Activity.RESULT_OK)
-      with(addPhotoFragment) {
-        setPhoto(it.data)
-        setPostMode()
-      }
+  private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+
+  fun setupLauncher(fragment: Fragment, action: (intent: Intent?) -> Unit) {
+    galleryLauncher = fragment.registerForActivityResult(StartActivityForResult()) {
+      if (it.resultCode == Activity.RESULT_OK)
+        action(it.data)
+    }
   }
 
   fun openGallery() {

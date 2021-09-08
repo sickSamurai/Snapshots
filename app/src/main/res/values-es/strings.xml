@@ -2,11 +2,15 @@
 <resources>
     <string name="app_name">Instantaneas</string>
     <string name="home_title">Home</string>
-    <string name="home_profile">Profile</string>
-    <string name="home_add_photo">Add</string>
+    <string name="home_profile">Perfil</string>
+    <string name="home_add_photo">Añadir</string>
     <string name="message_select_image">Selecciona una imagen</string>
     <string name="message_add_title">Por favor añade un titulo</string>
     <string name="message_successful_upload">Instantanea subida correcta</string>
     <string name="message_failed_upload">Subida de instantanea fallida</string>
     <string name="hint_input_title">Titulo de la instantanea</string>
+    <string name="btn_close_session_text">Cerrar Sesión</string>
+    <string name="message_sign_out">Nos vemos luego</string>
+    <string name="message_sign_in">Bienvenido…</string>
+    <string name="message_snapshot_deleted">Instantanea borrada</string>
 </resources>

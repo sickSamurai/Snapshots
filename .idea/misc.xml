@@ -3,8 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/drawable/ic_add_photo.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/drawable/ic_delete.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/drawable/ic_image_search.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/drawable/ic_thumb_up.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/fragment_add_photo.xml" value="0.33" />
-        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/item_snapshot.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="..\:/Users/ldmck/Android Apps/Snapshots/app/src/main/res/layout/item_snapshot.xml" value="0.25" />
       </map>
     </option>
   </component>
