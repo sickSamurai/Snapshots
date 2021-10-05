@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.views.homeModule
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blackpanthers.snapshots.utils.FirebaseUtilities
+import com.blackpanthers.snapshots.R
+import com.blackpanthers.snapshots.db.Snapshot
 import com.blackpanthers.snapshots.databinding.FragmentHomeBinding
 import com.blackpanthers.snapshots.databinding.ItemSnapshotBinding
 import com.bumptech.glide.Glide

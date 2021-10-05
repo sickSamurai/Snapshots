@@ -1,9 +1,13 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.blackpanthers.snapshots.R
+import com.blackpanthers.snapshots.views.addModule.AddPhotoFragment
 import com.blackpanthers.snapshots.databinding.ActivityMainBinding
+import com.blackpanthers.snapshots.views.homeModule.HomeFragment
+import com.blackpanthers.snapshots.views.profileModule.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
   lateinit var binding: ActivityMainBinding

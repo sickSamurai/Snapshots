@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ProfileFragment">
+    tools:context=".views.profileModule.ProfileFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_name"
@@ -32,7 +32,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_exit_to_app"
+        app:iconTint="?attr/colorOnPrimary"
         android:text="@string/btn_close_session_text"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

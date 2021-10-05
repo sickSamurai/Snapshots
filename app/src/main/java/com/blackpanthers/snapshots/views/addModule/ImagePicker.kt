@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.views.addModule
 
 import android.app.Activity
 import android.content.Intent

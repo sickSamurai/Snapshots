@@ -1,14 +1,20 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.views.addModule
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.blackpanthers.snapshots.utils.FirebaseUtilities
+import com.blackpanthers.snapshots.R
+import com.blackpanthers.snapshots.db.Snapshot
 import com.blackpanthers.snapshots.databinding.FragmentAddPhotoBinding
+import com.blackpanthers.snapshots.utils.KeyboardHider
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.FirebaseStorage
@@ -36,7 +42,7 @@ class AddPhotoFragment : Fragment() {
     setupButtons()
   }
 
-  fun setupFirebase(){
+  fun setupFirebase() {
     myDatabaseReference = FirebaseUtilities.getDatabaseReference()
     myStorageReference = FirebaseStorage.getInstance().reference
   }
@@ -65,6 +71,7 @@ class AddPhotoFragment : Fragment() {
       btnPost.visibility = View.GONE
       progressBar.visibility = View.GONE
       imgPhoto.setImageURI(null)
+      btnSelect.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_image_search))
     }
   }
 
@@ -74,12 +81,16 @@ class AddPhotoFragment : Fragment() {
       containerInputTitle.visibility = View.VISIBLE
       btnPost.visibility = View.VISIBLE
       progressBar.visibility = View.GONE
+
     }
   }
 
   fun setPhoto(intent: Intent?) {
     selectedPhotoURI = intent?.data
     binding.imgPhoto.setImageURI(selectedPhotoURI)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      binding.btnSelect.setImageDrawable(null)
+    }
   }
 
   fun saveSnapshot(snapshot: Snapshot) {
@@ -94,7 +105,7 @@ class AddPhotoFragment : Fragment() {
     binding.textMessage.text = progress.toString()
   }
 
-  fun onFailedUpload(exception: Exception){
+  fun onFailedUpload(exception: Exception) {
     Toast.makeText(context, exception.message, Toast.LENGTH_SHORT).show()
     setPostMode()
   }
@@ -116,7 +127,8 @@ class AddPhotoFragment : Fragment() {
         .addOnProgressListener { onProgressUpload(it) }
         .addOnFailureListener { onFailedUpload(it) }
         .addOnSuccessListener {
-          onSuccessUpload(it.storage.downloadUrl, Snapshot(key, binding.inputTitle.text.toString()))
+          onSuccessUpload(it.storage.downloadUrl,
+                          Snapshot(key, binding.inputTitle.text.toString()))
         }
     }
   }

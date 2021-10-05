@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/default_space"
-    tools:context=".AddPhotoFragment">
+    tools:context=".views.addModule.AddPhotoFragment">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/min_space"
-        android:text="post"
+        android:text="@string/btn_post_text"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress_bar"
@@ -74,7 +74,7 @@
         app:layout_constraintEnd_toEndOf="@id/img_photo"
         app:layout_constraintTop_toTopOf="@id/img_photo"
         app:layout_constraintBottom_toBottomOf="@id/img_photo"
-        android:src="@drawable/ic_image_search"
-        android:background="?attr/selectableItemBackground"/>
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_image_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.utils
 
 import android.app.Activity
 import android.content.Context

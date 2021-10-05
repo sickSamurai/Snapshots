@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.utils
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,8 +16,5 @@ class FirebaseUtilities {
 
     fun getCurrentUserUID(): String = FirebaseAuth.getInstance().currentUser?.uid!!
 
-    fun getCurrentUserName(): String = FirebaseAuth.getInstance().currentUser?.displayName!!
-
-    fun getCurrentUserEmail(): String = FirebaseAuth.getInstance().currentUser?.email!!
   }
 }

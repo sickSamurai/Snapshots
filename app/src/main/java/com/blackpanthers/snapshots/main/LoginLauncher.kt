@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.main
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
+import com.blackpanthers.snapshots.utils.FirebaseUtilities
+import com.blackpanthers.snapshots.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -23,7 +25,8 @@ class LoginLauncher() {
   fun setupLauncher(activity: AppCompatActivity) {
     loginLauncher = activity.registerForActivityResult(StartActivityForResult()) {
       if (it.resultCode == Activity.RESULT_OK) {
-        val signInMessage = activity.getString(R.string.message_sign_in) + " " + FirebaseUtilities.getCurrentUserName()
+        val userName = FirebaseUtilities.getCurrentUser()?.displayName!!
+        val signInMessage = activity.getString(R.string.message_sign_in) + " " + userName
         Toast.makeText(activity.applicationContext, signInMessage, Toast.LENGTH_SHORT).show()
       } else {
         if (IdpResponse.fromResultIntent(it.data) == null) {

@@ -1,4 +1,4 @@
-package com.blackpanthers.snapshots
+package com.blackpanthers.snapshots.db
 
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
